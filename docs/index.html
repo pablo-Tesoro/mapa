@@ -189,7 +189,23 @@
         .garden {
             top: 478px;
             left: 336px;
-            background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+            background: linear-gradient(135deg, #8B4513, #CD853F);
+        }
+        
+        .treasure-chest-final {
+            animation: treasureVibrate 0.5s infinite, treasureGrow 2s ease-out forwards;
+        }
+        
+        @keyframes treasureVibrate {
+            0%, 100% { transform: translateX(0) scale(1.5); }
+            25% { transform: translateX(-2px) scale(1.5); }
+            50% { transform: translateX(2px) scale(1.5); }
+            75% { transform: translateX(-1px) scale(1.5); }
+        }
+        
+        @keyframes treasureGrow {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.5); }
         }
         
         .surprise {
@@ -355,6 +371,88 @@
             font-size: 1.2rem;
             color: #8B0045;
             font-weight: bold;
+        }
+        
+        .timer-challenge-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .timer-display {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .timer-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #8B0045;
+            font-family: 'Dancing Script', cursive;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .timer-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg);
+        }
+        
+        .timer-instructions {
+            background: rgba(255, 182, 193, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #FFB6C1;
+        }
+        
+        .timer-instructions p {
+            margin: 10px 0;
+            font-size: 1.2rem;
+            color: #8B0045;
+            font-weight: bold;
+        }
+        
+        .timer-buttons {
+            margin: 20px 0;
+        }
+        
+        .timer-btn {
+            background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .timer-btn:hover {
+            background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        .timer-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
         }
         
         .question {
@@ -663,11 +761,11 @@
                 </div>
                 
                 <div class="location bridge" data-location="bridge" data-step="4" onclick="exploreLocation('bridge', 4)">
-                    🌉
+                    👥
                 </div>
                 
                 <div class="location garden" data-location="garden" data-step="5" onclick="exploreLocation('garden', 5)">
-                    🌹
+                    🏴‍☠️
                 </div>
                 
 
@@ -698,6 +796,32 @@
                 <div id="photoResult" class="quiz-result" style="display: none;"></div>
             </div>
             
+            <!-- Timer Challenge Container -->
+            <div id="timerChallengeContainer" class="timer-challenge-container" style="display: none;">
+                <div class="timer-display">
+                    <div class="timer-circle">
+                        <div class="timer-text">
+                            <span id="timerMinutes">01</span>:<span id="timerSeconds">00</span>
+                        </div>
+                        <svg class="timer-progress" width="200" height="200">
+                            <circle cx="100" cy="100" r="90" stroke="#FFE4E1" stroke-width="8" fill="none"/>
+                            <circle id="timerProgressCircle" cx="100" cy="100" r="90" stroke="#FF69B4" stroke-width="8" fill="none" 
+                                    stroke-dasharray="565.48" stroke-dashoffset="565.48" transform="rotate(-90 100 100)"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="timer-instructions">
+                    <p>👁️ Miraos fijamente a los ojos</p>
+                    <p>🤐 Sin hablar ni reírse</p>
+                    <p>💕 Conectad vuestras almas</p>
+                </div>
+                <div class="timer-buttons">
+                    <button id="startTimerBtn" class="timer-btn" onclick="startTimer()">🚀 ¡Comenzar Desafío!</button>
+                    <button id="resetTimerBtn" class="timer-btn" onclick="resetTimer()" style="display: none;">🔄 Reintentar</button>
+                </div>
+                <div id="timerResult" class="quiz-result" style="display: none;"></div>
+            </div>
+            
             <button id="closeBtn" class="close-btn" onclick="closeModal()">¡Desafío Completado! 💕</button>
         </div>
     </div>
@@ -711,6 +835,10 @@
         let currentPhotoChallenge = null;
         let completedPoses = [];
         let photoChallengeCompleted = false;
+        let currentTimerChallenge = null;
+        let timerInterval = null;
+        let timerCompleted = false;
+        let remainingTime = 0;
         
         const romanticChallenges = {
             park: {
@@ -866,16 +994,19 @@
                     }
                 ]
             },
+
             bridge: {
                 title: "🌉 Puente de las Promesas",
                 text: "Este puente conecta no solo dos orillas, sino dos corazones. Aquí las promesas se vuelven eternas.",
-                challenge: "DESAFÍO: Haced una promesa romántica el uno al otro para el próximo año. Selladla con un beso bajo las estrellas (o luces del puente).",
-                step: 4
+                challenge: "DESAFÍO: Miraos fijamente a los ojos durante 1 minuto completo sin reíros ni decir nada. ¡La conexión más profunda!",
+                step: 4,
+                isTimerChallenge: true,
+                timerDuration: 60 // 60 segundos
             },
             garden: {
-                title: "🌹 Jardín de los Sentimientos",
-                text: "Como las flores que florecen, vuestro amor crece cada día. Cada pétalo representa un momento especial compartido.",
-                challenge: "DESAFÍO: Recoged (o imaginad) cinco flores diferentes. Cada una representa una cualidad que amáis del otro. Explicad por qué elegisteis cada flor.",
+                title: "🏴‍☠️ El Cofre del Tesoro Final",
+                text: "¡Habéis llegado al cofre del tesoro más preciado! Este baúl pirata guarda el secreto final de vuestra aventura romántica.",
+                challenge: "DESAFÍO FINAL: ¡Felicidades! Habéis completado todos los retos. Ahora abrid el cofre y descubrid el último secreto que os espera...",
                 step: 5
             },
             surprise: {
@@ -916,9 +1047,16 @@
                 setupPhotoChallenge(challenge);
                 document.getElementById('closeBtn').style.display = 'none';
                 document.getElementById('quizContainer').style.display = 'none';
+                document.getElementById('timerChallengeContainer').style.display = 'none';
+            } else if (challenge.isTimerChallenge) {
+                setupTimerChallenge(challenge);
+                document.getElementById('closeBtn').style.display = 'none';
+                document.getElementById('quizContainer').style.display = 'none';
+                document.getElementById('photoChallengeContainer').style.display = 'none';
             } else {
                 document.getElementById('quizContainer').style.display = 'none';
                 document.getElementById('photoChallengeContainer').style.display = 'none';
+                document.getElementById('timerChallengeContainer').style.display = 'none';
                 document.getElementById('closeBtn').style.display = 'block';
                 // Completar inmediatamente para desafíos normales
                 completeChallenge(locationName, step);
@@ -1142,6 +1280,109 @@
             document.getElementById('photoProgress').style.display = 'none';
         }
         
+        function setupTimerChallenge(challenge) {
+            currentTimerChallenge = challenge;
+            timerCompleted = false;
+            remainingTime = challenge.timerDuration;
+            
+            document.getElementById('timerChallengeContainer').style.display = 'block';
+            document.getElementById('timerResult').style.display = 'none';
+            document.getElementById('startTimerBtn').style.display = 'inline-block';
+            document.getElementById('resetTimerBtn').style.display = 'none';
+            
+            // Resetear el timer visual
+            updateTimerDisplay();
+            resetTimerProgress();
+        }
+        
+        function startTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            remainingTime = currentTimerChallenge.timerDuration;
+            document.getElementById('startTimerBtn').disabled = true;
+            document.getElementById('startTimerBtn').textContent = '⏳ En progreso...';
+            
+            timerInterval = setInterval(() => {
+                remainingTime--;
+                updateTimerDisplay();
+                updateTimerProgress();
+                
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    showTimerSuccess();
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            
+            document.getElementById('timerMinutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('timerSeconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        function updateTimerProgress() {
+            const totalTime = currentTimerChallenge.timerDuration;
+            const progress = (totalTime - remainingTime) / totalTime;
+            const circumference = 2 * Math.PI * 90; // radio = 90
+            const offset = circumference - (progress * circumference);
+            
+            document.getElementById('timerProgressCircle').style.strokeDashoffset = offset;
+        }
+        
+        function resetTimerProgress() {
+            const circumference = 2 * Math.PI * 90;
+            document.getElementById('timerProgressCircle').style.strokeDashoffset = circumference;
+        }
+        
+        function resetTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            remainingTime = currentTimerChallenge.timerDuration;
+            updateTimerDisplay();
+            resetTimerProgress();
+            
+            document.getElementById('startTimerBtn').disabled = false;
+            document.getElementById('startTimerBtn').textContent = '🚀 ¡Comenzar Desafío!';
+            document.getElementById('startTimerBtn').style.display = 'inline-block';
+            document.getElementById('resetTimerBtn').style.display = 'none';
+            document.getElementById('timerResult').style.display = 'none';
+        }
+        
+        function showTimerSuccess() {
+            const resultDiv = document.getElementById('timerResult');
+            resultDiv.className = 'quiz-result quiz-success';
+            resultDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: #8B0045; margin-bottom: 15px; font-family: 'Dancing Script', cursive; font-size: 2rem;">
+                        ¡INCREÍBLE! 👁️💕
+                    </h3>
+                    <p style="color: #8B0045; font-size: 1.3rem; margin: 15px 0;">
+                        ¡Habéis logrado mantener la conexión visual durante un minuto completo!
+                    </p>
+                    <p style="color: #4A4A4A; font-size: 1.1rem;">
+                        Vuestra conexión es tan profunda que el tiempo se detiene cuando os miráis. 💖
+                    </p>
+                </div>
+            `;
+            resultDiv.style.display = 'block';
+            timerCompleted = true;
+            
+            document.getElementById('closeBtn').style.display = 'block';
+            document.getElementById('closeBtn').textContent = '¡Continuar Aventura! 💕';
+            document.getElementById('startTimerBtn').style.display = 'none';
+            document.getElementById('resetTimerBtn').style.display = 'inline-block';
+            
+            // Crear efecto de corazones
+            const timerContainer = document.getElementById('timerChallengeContainer');
+            createHeartParticles(timerContainer);
+        }
+        
         function completeChallenge(locationName, step) {
             // Marcar como completado
             completedSteps.push(step);
@@ -1155,6 +1396,15 @@
             // Activar siguiente ubicación
             if (step < 6) {
                 activateNextLocation(step + 1);
+            }
+            
+            // Si es el último desafío (garden/tesoro), mostrar mensaje final
+            if (locationName === 'garden' && step === 5) {
+                // Hacer que el baúl del tesoro crezca y vibre
+                locationElement.classList.add('treasure-chest-final');
+                setTimeout(() => {
+                    showFinalCompletionMessage();
+                }, 1000);
             }
             
             // Efectos especiales
@@ -1207,6 +1457,130 @@
             setupQuiz(footballChallenge);
         }
         
+        function showFinalCompletionMessage() {
+            // Crear modal especial para el mensaje final
+            const finalModal = document.createElement('div');
+            finalModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            finalModal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #FFF0F5, #FFE4E1);
+                    padding: 40px;
+                    border-radius: 25px;
+                    text-align: center;
+                    max-width: 600px;
+                    width: 90%;
+                    border: 6px solid #D8537A;
+                    box-shadow: 0 0 50px rgba(216, 83, 122, 0.6);
+                    animation: finalGlow 2s infinite alternate;
+                ">
+                    <h1 style="
+                        font-family: 'Dancing Script', cursive;
+                        font-size: 3rem;
+                        color: #8B0045;
+                        margin-bottom: 30px;
+                        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                    ">¡ENHORABUENA! 🎉</h1>
+                    
+                    <div style="margin: 30px 0;">
+                        <div style="
+                            width: 200px;
+                            height: 200px;
+                            margin: 0 auto 20px;
+                            border-radius: 20px;
+                            background: linear-gradient(135deg, #8B4513, #CD853F);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 5rem;
+                            border: 8px solid #D8537A;
+                            box-shadow: 0 0 30px rgba(139, 69, 19, 0.6);
+                            animation: treasureRotate 3s linear infinite;
+                        ">🏴‍☠️</div>
+                    </div>
+                    
+                    <p style="
+                        font-size: 1.5rem;
+                        color: #8B0045;
+                        margin: 25px 0;
+                        font-weight: bold;
+                        line-height: 1.6;
+                    ">¡Habéis completado toda la aventura romántica!</p>
+                    
+                    <div style="
+                        background: rgba(255, 182, 193, 0.3);
+                        padding: 25px;
+                        border-radius: 20px;
+                        margin: 30px 0;
+                        border: 3px solid #FF69B4;
+                    ">
+                        <p style="
+                            font-size: 1.8rem;
+                            color: #8B0045;
+                            font-weight: bold;
+                            margin-bottom: 15px;
+                            font-family: 'Dancing Script', cursive;
+                        ">💝 MENSAJE FINAL 💝</p>
+                        <p style="
+                            font-size: 1.3rem;
+                            color: #4A4A4A;
+                            line-height: 1.6;
+                        "><strong>Mira en tu bolso,<br>ahí será donde guardé<br>el último secreto</strong> 🎁</p>
+                    </div>
+                    
+                    <button onclick="closeFinalMessage()" style="
+                        background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+                        color: white;
+                        border: none;
+                        padding: 20px 40px;
+                        border-radius: 30px;
+                        font-size: 1.3rem;
+                        font-family: 'Playfair Display', serif;
+                        font-weight: bold;
+                        cursor: pointer;
+                        box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                        ¡Gracias por esta aventura! 💕
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(finalModal);
+            
+            // Añadir estilos de animación
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes finalGlow {
+                    0% { box-shadow: 0 0 50px rgba(216, 83, 122, 0.6); }
+                    100% { box-shadow: 0 0 80px rgba(216, 83, 122, 0.9); }
+                }
+                @keyframes treasureRotate {
+                    0% { transform: rotate(0deg) scale(1); }
+                    50% { transform: rotate(180deg) scale(1.1); }
+                    100% { transform: rotate(360deg) scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Función global para cerrar el mensaje final
+            window.closeFinalMessage = function() {
+                finalModal.remove();
+                style.remove();
+            };
+        }
+        
         function createHeartParticles(element) {
             const hearts = ['💕', '💖', '💗', '💘', '💝'];
             
@@ -1231,7 +1605,7 @@
         
         function closeModal() {
             // Solo cerrar si no hay desafíos activos o si fueron completados
-            if ((!currentQuiz || quizPassed) && (!currentPhotoChallenge || photoChallengeCompleted)) {
+            if ((!currentQuiz || quizPassed) && (!currentPhotoChallenge || photoChallengeCompleted) && (!currentTimerChallenge || timerCompleted)) {
                 if (currentQuiz && quizPassed) {
                     // Completar el desafío del quiz según la ubicación
                     if (currentQuiz.step === 1) {
@@ -1258,6 +1632,16 @@
                     photoChallengeCompleted = false;
                     completedPoses = [];
                 }
+                if (currentTimerChallenge && timerCompleted) {
+                    // Completar el desafío del timer
+                    completeChallenge('bridge', 4);
+                    currentTimerChallenge = null;
+                    timerCompleted = false;
+                    if (timerInterval) {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                    }
+                }
                 document.getElementById('modal').style.display = 'none';
             }
         }
@@ -1280,5 +1664,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7c9f3c3f303bd',t:'MTc1NDQxMjU3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a8091787b80341',t:'MTc1NDQxNTE2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
