@@ -56,7 +56,7 @@
             width: 100%;
             max-width: 1000px;
             margin: 0 auto;
-            background: url("back.png");
+            background-image: url("back.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -163,32 +163,32 @@
 
         
         .park {
-            top: 50px;
-            left: 495px;
+            top: 52px;
+            left: 497px;
             background: linear-gradient(135deg, #98FB98, #90EE90);
         }
         
         .cafe {
-            top: 150px;
-            left: 430px;
+            top: 160px;
+            left: 437px;
             background: linear-gradient(135deg, #DEB887, #F4A460);
         }
         
         .library {
-            top: 350px;
-            left: 200px;
+            top: 262px;
+            left: 210px;
             background: linear-gradient(135deg, #9370DB, #BA55D3);
         }
         
         .bridge {
-            top: 450px;
-            left: 500px;
+            top: 478px;
+            left: 336px;
             background: linear-gradient(135deg, #87CEEB, #B0E0E6);
         }
         
         .garden {
-            top: 150px;
-            left: 650px;
+            top: 364px;
+            left: 312px;
             background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
         }
         
@@ -204,70 +204,7 @@
             50% { transform: scale(1.1); }
         }
         
-        .treasure-path {
-            position: absolute;
-            height: 6px;
-            background: 
-                repeating-linear-gradient(90deg, 
-                    #8B4513 0px, #8B4513 8px, 
-                    transparent 8px, transparent 12px);
-            border-radius: 3px;
-            opacity: 0.8;
-            box-shadow: 
-                0 2px 4px rgba(0,0,0,0.3),
-                inset 0 1px 1px rgba(255,255,255,0.1);
-            z-index: 5;
-        }
-        
-        .treasure-path::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: 
-                repeating-linear-gradient(90deg, 
-                    rgba(139, 69, 19, 0.3) 0px, rgba(139, 69, 19, 0.3) 8px, 
-                    transparent 8px, transparent 12px);
-            border-radius: 5px;
-            z-index: -1;
-        }
-        
-        .path1 {
-            top: 110px;
-            left: 220px;
-            width: 150px;
-            transform: rotate(20deg);
-        }
-        
-        .path2 {
-            top: 250px;
-            left: 420px;
-            width: 120px;
-            transform: rotate(-60deg);
-        }
-        
-        .path3 {
-            top: 400px;
-            left: 270px;
-            width: 140px;
-            transform: rotate(35deg);
-        }
-        
-        .path4 {
-            top: 480px;
-            left: 570px;
-            width: 130px;
-            transform: rotate(-25deg);
-        }
-        
-        .path5 {
-            top: 180px;
-            left: 720px;
-            width: 110px;
-            transform: rotate(70deg);
-        }
+
         
         .modal {
             display: none;
@@ -712,15 +649,6 @@
             </div>
             
             <div class="map-grid">
-                <!-- Senderos del tesoro (siempre visibles) -->
-                <div class="treasure-path path1"></div>
-                <div class="treasure-path path2"></div>
-                <div class="treasure-path path3"></div>
-                <div class="treasure-path path4"></div>
-                <div class="treasure-path path5"></div>
-                
-
-                
                 <!-- Ubicaciones románticas en orden -->
                 <div class="location park active" data-location="park" data-step="1" onclick="exploreLocation('park', 1)">
                     ❓
@@ -742,9 +670,7 @@
                     🌹
                 </div>
                 
-                <div class="location surprise" data-location="surprise" data-step="6" onclick="exploreLocation('surprise', 6)">
-                    💝
-                </div>
+
             </div>
         </div>
     </div>
@@ -906,21 +832,21 @@
                     {
                         question: "¿Quién es este personaje?",
                         character: "Jon Snow",
-                        imageUrl: "alliser.png",
-                        options: ["a. Alliser Thorne", "b. Donal Noye", "c. Benjen Stark"],
+                        imageUrl: "TU_URL_AQUI_JON_SNOW",
+                        options: ["a. Jon Snow", "b. Robb Stark", "c. Ned Stark"],
                         correct: 0
                     },
                     {
                         question: "¿Quién es esta personaje?",
                         character: "Daenerys Targaryen",
-                        imageUrl: "https://github.com/pablo-Tesoro/mapa/blob/main/docs/daenerys.jpg",
+                        imageUrl: "TU_URL_AQUI_DAENERYS",
                         options: ["a. Cersei Lannister", "b. Daenerys Targaryen", "c. Sansa Stark"],
                         correct: 1
                     },
                     {
                         question: "¿Quién es este personaje?",
                         character: "Tyrion Lannister",
-                        imageUrl: "https://github.com/pablo-Tesoro/mapa/blob/main/docs/tyrion.jpg",
+                        imageUrl: "TU_URL_AQUI_TYRION",
                         options: ["a. Jaime Lannister", "b. Tyrion Lannister", "c. Tywin Lannister"],
                         correct: 1
                     }
@@ -1300,5 +1226,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a782c8e2cecea7',t:'MTc1NDQwOTY2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7b5c9f69d46f4',t:'MTc1NDQxMTc1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
