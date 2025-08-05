@@ -56,7 +56,7 @@
             width: 100%;
             max-width: 1000px;
             margin: 0 auto;
-            background-image: url("back.png");
+            background-image: url("https://github.com/pablo-Tesoro/mapa/blob/main/docs/ChatGPT%20Image%205%20ago%202025%2C%2017_06_48%20(3).png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -116,7 +116,7 @@
                 0 0 0 4px #8B4513,
                 0 0 0 8px #A0522D;
             border: 3px solid #F5DEB3;
-            opacity: 0.6;
+            opacity: 0.5;
             z-index: 10;
         }
         
@@ -831,9 +831,9 @@
                 questions: [
                     {
                         question: "¿Quién es este personaje?",
-                        character: "Alliser Thorne",
-                        imageUrl: "alliser.png",
-                        options: ["a. Alliser Thorne", "b. Donal Noye", "c. Benjen Stark"],
+                        character: "Jon Snow",
+                        imageUrl: "TU_URL_AQUI_JON_SNOW",
+                        options: ["a. Jon Snow", "b. Robb Stark", "c. Ned Stark"],
                         correct: 0
                     },
                     {
@@ -849,6 +849,20 @@
                         imageUrl: "TU_URL_AQUI_TYRION",
                         options: ["a. Jaime Lannister", "b. Tyrion Lannister", "c. Tywin Lannister"],
                         correct: 1
+                    }
+                ]
+            },
+            footballQuiz: {
+                title: "⚽ Pregunta Rápida del Corazón",
+                text: "Antes de continuar con vuestra aventura romántica, una pregunta importante que define el alma...",
+                challenge: "PREGUNTA RÁPIDA: ¿Cuál es el mejor equipo del mundo?",
+                step: 3.5,
+                isQuiz: true,
+                questions: [
+                    {
+                        question: "¿Cuál es el mejor equipo del mundo?",
+                        options: ["a. Atlético de Madrid", "b. Real Madrid"],
+                        correct: 0 // Atlético de Madrid es la respuesta correcta
                     }
                 ]
             },
@@ -1010,7 +1024,29 @@
         function showQuizSuccess() {
             const resultDiv = document.getElementById('quizResult');
             resultDiv.className = 'quiz-result quiz-success';
-            resultDiv.textContent = '¡Perfecto! 💕 Todas las respuestas son correctas. ¡Puedes continuar con la aventura!';
+            
+            // Mensaje especial para la pregunta de fútbol
+            if (currentQuiz.step === 3.5) {
+                resultDiv.innerHTML = `
+                    <div style="text-align: center;">
+                        <h3 style="color: #8B0045; margin-bottom: 20px; font-family: 'Dancing Script', cursive; font-size: 2rem;">
+                            ¡EXCELENTE ELECCIÓN! 🔴⚪
+                        </h3>
+                        <div style="margin: 20px 0;">
+                            <img src="TU_URL_DE_IMAGEN_AQUI" alt="Atlético de Madrid" style="max-width: 300px; height: auto; border-radius: 15px; border: 4px solid #D8537A; box-shadow: 0 8px 20px rgba(216, 83, 122, 0.4);" />
+                        </div>
+                        <p style="color: #8B0045; font-size: 1.3rem; font-weight: bold; margin: 15px 0;">
+                            ¡Has elegido al mejor equipo del mundo! 💕
+                        </p>
+                        <p style="color: #4A4A4A; font-size: 1.1rem;">
+                            El Atlético de Madrid, el equipo del corazón. ¡Aúpa Atleti! ❤️🤍
+                        </p>
+                    </div>
+                `;
+            } else {
+                resultDiv.textContent = '¡Perfecto! 💕 Todas las respuestas son correctas. ¡Puedes continuar con la aventura!';
+            }
+            
             resultDiv.style.display = 'block';
             quizPassed = true;
             document.getElementById('closeBtn').style.display = 'block';
@@ -1162,6 +1198,18 @@
             }
         }
         
+        function showFootballQuiz() {
+            const footballChallenge = romanticChallenges.footballQuiz;
+            
+            // Actualizar el contenido del modal
+            document.getElementById('modalTitle').textContent = footballChallenge.title;
+            document.getElementById('modalText').textContent = footballChallenge.text;
+            document.getElementById('challengeText').textContent = footballChallenge.challenge;
+            
+            // Configurar el quiz de fútbol
+            setupQuiz(footballChallenge);
+        }
+        
         function createHeartParticles(element) {
             const hearts = ['💕', '💖', '💗', '💘', '💝'];
             
@@ -1192,7 +1240,16 @@
                     if (currentQuiz.step === 1) {
                         completeChallenge('park', 1);
                     } else if (currentQuiz.step === 3) {
+                        // Después del quiz de la biblioteca, mostrar la pregunta de fútbol
                         completeChallenge('library', 3);
+                        setTimeout(() => {
+                            showFootballQuiz();
+                        }, 500);
+                        return; // No cerrar el modal todavía
+                    } else if (currentQuiz.step === 3.5) {
+                        // Completar la pregunta de fútbol y continuar
+                        currentQuiz = null;
+                        quizPassed = false;
                     }
                     currentQuiz = null;
                     quizPassed = false;
@@ -1226,5 +1283,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7b5c9f69d46f4',t:'MTc1NDQxMTc1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7c9f3c3f303bd',t:'MTc1NDQxMjU3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
