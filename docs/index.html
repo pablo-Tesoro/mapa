@@ -116,8 +116,27 @@
                 0 0 0 4px #8B4513,
                 0 0 0 8px #A0522D;
             border: 3px solid #F5DEB3;
-            opacity: 0.5;
+            opacity: 0.3;
             z-index: 10;
+        }
+        
+        .location.locked {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #696969, #808080) !important;
+            box-shadow: 
+                0 4px 10px rgba(0,0,0,0.2),
+                0 0 0 4px #555555,
+                0 0 0 8px #777777;
+            border-color: #CCCCCC;
+        }
+        
+        .location.locked:hover {
+            transform: none;
+            box-shadow: 
+                0 4px 10px rgba(0,0,0,0.2),
+                0 0 0 4px #555555,
+                0 0 0 8px #777777;
         }
         
         .location.active {
@@ -218,6 +237,57 @@
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
+        }
+        
+        .location.unlocking {
+            animation: unlockAnimation 1.5s ease-in-out forwards;
+        }
+        
+        @keyframes unlockAnimation {
+            0% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: scale(1.3) rotate(10deg);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.1) rotate(-5deg);
+                opacity: 0.8;
+            }
+            75% {
+                transform: scale(1.2) rotate(3deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        
+        .unlock-particle {
+            position: absolute;
+            font-size: 1.2rem;
+            color: #FFD700;
+            animation: unlock-float 2s ease-out forwards;
+            pointer-events: none;
+            z-index: 15;
+        }
+        
+        @keyframes unlock-float {
+            0% {
+                opacity: 1;
+                transform: scale(0) translateY(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2) translateY(-20px) rotate(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) translateY(-50px) rotate(360deg);
+            }
         }
         
 
@@ -752,20 +822,20 @@
                     ❓
                 </div>
                 
-                <div class="location cafe" data-location="cafe" data-step="2" onclick="exploreLocation('cafe', 2)">
-                    📷
+                <div class="location cafe locked" data-location="cafe" data-step="2" onclick="exploreLocation('cafe', 2)">
+                    🔒
                 </div>
                 
-                <div class="location library" data-location="library" data-step="3" onclick="exploreLocation('library', 3)">
-                    🎬
+                <div class="location library locked" data-location="library" data-step="3" onclick="exploreLocation('library', 3)">
+                    🔒
                 </div>
                 
-                <div class="location bridge" data-location="bridge" data-step="4" onclick="exploreLocation('bridge', 4)">
-                    👥
+                <div class="location bridge locked" data-location="bridge" data-step="4" onclick="exploreLocation('bridge', 4)">
+                    🔒
                 </div>
                 
-                <div class="location garden" data-location="garden" data-step="5" onclick="exploreLocation('garden', 5)">
-                    🏴‍☠️
+                <div class="location garden locked" data-location="garden" data-step="5" onclick="exploreLocation('garden', 5)">
+                    🔒
                 </div>
                 
 
@@ -1019,6 +1089,14 @@
         };
         
         function exploreLocation(locationName, step) {
+            const locationElement = document.querySelector(`[data-location="${locationName}"]`);
+            
+            // Verificar si está bloqueado
+            if (locationElement.classList.contains('locked')) {
+                showLockedMessage();
+                return;
+            }
+            
             // Solo permitir el paso actual
             if (step !== currentStep) {
                 if (step < currentStep) {
@@ -1426,10 +1504,144 @@
         function activateNextLocation(nextStep) {
             if (nextStep <= 6) {
                 const nextLocation = document.querySelector(`[data-step="${nextStep}"]`);
-                if (nextLocation) {
-                    nextLocation.classList.add('active');
+                if (nextLocation && nextLocation.classList.contains('locked')) {
+                    // Animar el desbloqueo
+                    unlockLocation(nextLocation, nextStep);
                 }
             }
+        }
+        
+        function unlockLocation(locationElement, step) {
+            // Crear partículas de desbloqueo
+            createUnlockParticles(locationElement);
+            
+            // Animar el desbloqueo
+            locationElement.classList.add('unlocking');
+            
+            setTimeout(() => {
+                // Remover clases de bloqueo y añadir activo
+                locationElement.classList.remove('locked', 'unlocking');
+                locationElement.classList.add('active');
+                
+                // Cambiar el icono según el paso
+                const icons = {
+                    2: '📷', // cafe
+                    3: '🎬', // library
+                    4: '👥', // bridge
+                    5: '🏴‍☠️' // garden
+                };
+                
+                if (icons[step]) {
+                    locationElement.textContent = icons[step];
+                }
+                
+                // Efecto de brillo final
+                setTimeout(() => {
+                    createHeartParticles(locationElement);
+                }, 500);
+                
+            }, 1500);
+        }
+        
+        function createUnlockParticles(element) {
+            const particles = ['🔓', '✨', '💫', '⭐', '🌟'];
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'unlock-particle';
+                particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                
+                const rect = element.getBoundingClientRect();
+                const containerRect = element.parentElement.getBoundingClientRect();
+                
+                // Posicionar alrededor del elemento
+                const angle = (i / 8) * 2 * Math.PI;
+                const radius = 40;
+                const x = (rect.left - containerRect.left) + (rect.width / 2) + Math.cos(angle) * radius;
+                const y = (rect.top - containerRect.top) + (rect.height / 2) + Math.sin(angle) * radius;
+                
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                element.parentElement.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentElement) {
+                        particle.remove();
+                    }
+                }, 2000);
+            }
+        }
+        
+        function showLockedMessage() {
+            // Crear modal temporal para mensaje de bloqueo
+            const lockedModal = document.createElement('div');
+            lockedModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                z-index: 1500;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            lockedModal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #FFF0F5, #FFE4E1);
+                    padding: 30px;
+                    border-radius: 20px;
+                    text-align: center;
+                    max-width: 400px;
+                    width: 90%;
+                    border: 4px solid #D8537A;
+                    box-shadow: 0 0 30px rgba(216, 83, 122, 0.4);
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🔒</div>
+                    <h2 style="
+                        font-family: 'Dancing Script', cursive;
+                        font-size: 2rem;
+                        color: #8B0045;
+                        margin-bottom: 20px;
+                    ">¡Ubicación Bloqueada!</h2>
+                    <p style="
+                        color: #4A4A4A;
+                        font-size: 1.2rem;
+                        margin-bottom: 25px;
+                        line-height: 1.5;
+                    ">Debes completar el desafío anterior para desbloquear esta ubicación romántica 💕</p>
+                    <button onclick="closeLockedMessage()" style="
+                        background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+                        color: white;
+                        border: none;
+                        padding: 12px 25px;
+                        border-radius: 20px;
+                        font-size: 1.1rem;
+                        font-family: 'Playfair Display', serif;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    ">¡Entendido! 💖</button>
+                </div>
+            `;
+            
+            document.body.appendChild(lockedModal);
+            
+            // Función global para cerrar el mensaje
+            window.closeLockedMessage = function() {
+                lockedModal.remove();
+                delete window.closeLockedMessage;
+            };
+            
+            // Auto-cerrar después de 3 segundos
+            setTimeout(() => {
+                if (document.body.contains(lockedModal)) {
+                    lockedModal.remove();
+                    delete window.closeLockedMessage;
+                }
+            }, 3000);
         }
         
         // Los senderos ya están visibles en el mapa
@@ -1664,5 +1876,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a8091787b80341',t:'MTc1NDQxNTE2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a81928369903c7',t:'MTc1NDQxNTgyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
