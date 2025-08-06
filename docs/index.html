@@ -1293,18 +1293,14 @@
                 const poseCard = document.createElement('div');
                 poseCard.className = `pose-card ${isCompleted ? 'completed' : ''}`;
                 poseCard.innerHTML = `
-                    <span class="pose-emoji">${pose.emoji}</span>
-                    <div class="pose-name">${pose.name}</div>
                     <div class="pose-image">
                         <img 
                           src=${pose.imageUrl} 
                           alt=${pose.name} 
-                          width="160" 
-                          height="120" 
+                          width="300" 
+                          height="300" 
                         />
                     </div>
-                    <div class="pose-description">${pose.description}</div>
-                    <div class="pose-tips">${pose.tips}</div>
                     <button class="pose-button ${isCompleted ? 'completed' : ''}" 
                             onclick="completePose(${index})" 
                             ${isCompleted ? 'disabled' : ''}>
