@@ -1195,7 +1195,15 @@
         function showIncorrectMessage() {
             const resultDiv = document.getElementById('quizResult');
             resultDiv.className = 'quiz-result quiz-failure';
-            resultDiv.textContent = '¡Ups! 💔 Esa respuesta no es correcta. ¡Inténtalo de nuevo!';
+            resultDiv.textContent = '¡Ups! 💔 Esa no era. Pero no pasa nada, lo asumimos y seguimos con nuestras vidas...';
+            const img = document.createElement('img');
+            img.src = 'error.png';      // pon aquí la URL o ruta de tu imagen
+            img.alt = 'Descripción de la imagen'; // texto alternativo
+            // Opcional: ajustes de estilo
+            img.style.display = 'block';
+            img.style.marginTop = '10px';
+            // Lo insertamos después del texto
+            resultDiv.appendChild(img);
             resultDiv.style.display = 'block';
             document.getElementById('retryQuiz').style.display = 'inline-block';
         }
