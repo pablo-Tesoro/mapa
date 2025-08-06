@@ -1194,6 +1194,13 @@
                     </div>
                 `).join('')}
             `;
+            if (q.image) {
+                const img = document.createElement("img");
+                img.src = q.image.src;
+                img.alt = q.image.alt;
+                Object.assign(img.style, q.image.style);
+                container.appendChild(img);
+            }
             questionsContainer.appendChild(questionDiv);
         }
         
