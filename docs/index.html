@@ -1296,7 +1296,12 @@
                     <span class="pose-emoji">${pose.emoji}</span>
                     <div class="pose-name">${pose.name}</div>
                     <div class="pose-image">
-                        ${pose.imageUrl}
+                        <img 
+                          src=${pose.imageUrl} 
+                          alt=${pose.name} 
+                          width="160" 
+                          height="120" 
+                        />
                     </div>
                     <div class="pose-description">${pose.description}</div>
                     <div class="pose-tips">${pose.tips}</div>
