@@ -360,8 +360,8 @@
         }
         
         .pose-image {
-            width: 200px;
-            height: 150px;
+            width: 250px;
+            height: 250px;
             margin: 15px auto;
             border: 3px solid #FFB6C1;
             border-radius: 15px;
@@ -1246,13 +1246,12 @@
                 const poseCard = document.createElement('div');
                 poseCard.className = `pose-card ${isCompleted ? 'completed' : ''}`;
                 poseCard.innerHTML = `
-                    <span>${pose.name}</span>
                     <div class="pose-image">
                         <img 
                           src=${pose.imageUrl} 
                           alt=${pose.name} 
-                          width="160" 
-                          height="120" 
+                          width="220" 
+                          height="220" 
                         />
                     </div>
                     <button class="pose-button ${isCompleted ? 'completed' : ''}" 
