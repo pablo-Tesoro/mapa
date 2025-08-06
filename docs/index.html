@@ -936,9 +936,8 @@
                 ]
             },
             cafe: {
-                title: "☕ Café de los Susurros",
-                text: "El aroma del café despierta memorias dulces. Aquí las palabras fluyen como el vapor de una taza caliente.",
-                challenge: "DESAFÍO: ¡Hora de crear recuerdos fotográficos! Imitad estas 3 poses románticas de parejas:",
+                title: "📸 Sesión de Fotos",
+                challenge: "¡Hora de hacernos fotos! Hay que imitar cada una de las siguientes poses:",
                 step: 2,
                 isPhotoChallenge: true,
                 poses: [
@@ -960,31 +959,65 @@
                 ]
             },
             library: {
-                title: "📚 Biblioteca de los Sueños",
-                text: "Entre páginas y susurros, los sueños cobran vida. En esta biblioteca mágica, las historias épicas cobran vida.",
-                challenge: "DESAFÍO: ¡Demuestra tu conocimiento de Juego de Tronos! Identifica correctamente estos 3 personajes para continuar:",
+                title: "🎬 Test de Juego de Tronos",
+                challenge: "Veamos si es verdad que te gusta tanto Juego de Tronos como dices. Acierta todas las preguntas para continuar:",
                 step: 3,
                 isQuiz: true,
                 questions: [
                     {
                         question: "¿Quién es este personaje?",
-                        character: "Jon Snow",
-                        imageUrl: "TU_URL_AQUI_JON_SNOW",
-                        options: ["a. Jon Snow", "b. Robb Stark", "c. Ned Stark"],
-                        correct: 0
-                    },
-                    {
-                        question: "¿Quién es esta personaje?",
-                        character: "Daenerys Targaryen",
-                        imageUrl: "TU_URL_AQUI_DAENERYS",
-                        options: ["a. Cersei Lannister", "b. Daenerys Targaryen", "c. Sansa Stark"],
+                        character: "Allister Thorne",
+                        imageUrl: "allister.png",
+                        options: ["a. Donal Noye", "b. Allister Thorne", "c. Benjen Stark"],
                         correct: 1
                     },
                     {
-                        question: "¿Quién es este personaje?",
-                        character: "Tyrion Lannister",
-                        imageUrl: "TU_URL_AQUI_TYRION",
-                        options: ["a. Jaime Lannister", "b. Tyrion Lannister", "c. Tywin Lannister"],
+                        question: "¿Cuál de las siguientes NO es una familia en Juego de Tronos?",
+                        character: "",
+                        imageUrl: "",
+                        options: ["a. Tyrell", "b. Mortensen", "c. Bolton"],
+                        correct: 1
+                    },
+                    {
+                        question: "En el primer episodio de la temporada 1, ¿quién descubre accidentalmente el secreto de la Reina Cersei?",
+                        character: "",
+                        imageUrl: "",
+                        options: ["a. Bran Stark", "b. Joffry Baratheon", "c. Tyrion Lannister"],
+                        correct: 0
+                    },
+                    {
+                        question: "¿Con qué mató Tyrion a su padre?",
+                        character: "",
+                        imageUrl: "",
+                        options: ["a. Espada", "b. Mazo", "c. Ballesta"],
+                        correct: 2
+                    },
+                    {
+                        question: "¿Con qué mató Tyrion a su padre?",
+                        character: "",
+                        imageUrl: "",
+                        options: ["a. Espada", "b. Mazo", "c. Ballesta"],
+                        correct: 2
+                    },
+                    {
+                        question: "¿Cómo recibió Daenerys sus huevos de dragón?",
+                        character: "",
+                        imageUrl: "",
+                        options: ["a. Fueron regalo de bodas de Magister Illyrio.", "b. Un explorador se los trajo después de exporar el Desperdicio Rojo y tratando de buscar un refugio.", "c. Fueron un regalo de bienvenida después de llegar a la ciudad de Astapor en la Bahía Slaver."],
+                        correct: 0
+                    },
+                    {
+                        question: "¿Con qué sueña repetidamente Bran Stark?",
+                        character: "",
+                        imageUrl: "",
+                        options: ["a. Huargos", "b. Caminantes Blancos", "c. Un cuervo de tres ojos"],
+                        correct: 2
+                    },
+                    {
+                        question: "¿Por qué Samwell Tarly se unió a la Guardia de la Noche?",
+                        character: "",
+                        imageUrl: "",
+                        options: ["a. Fue un castigo por robar", "b. Su padre lo amenazó con matarlo si no se unía", "c. Era huérfano y no tenía otra opción"],
                         correct: 1
                     }
                 ]
@@ -1287,7 +1320,7 @@
         function showPhotoChallengeSuccess() {
             const resultDiv = document.getElementById('photoResult');
             resultDiv.className = 'quiz-result quiz-success';
-            resultDiv.textContent = '¡Fantástico! 📸💕 Habéis completado todas las poses románticas. ¡Qué recuerdos tan hermosos habéis creado!';
+            resultDiv.textContent = '¡Muy bien! Sigamos con nuestro camino...';
             resultDiv.style.display = 'block';
             photoChallengeCompleted = true;
             document.getElementById('closeBtn').style.display = 'block';
