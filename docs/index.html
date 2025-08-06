@@ -1243,9 +1243,9 @@
         }
         
         function retryQuiz() {
-            // Resetear el quiz
-            userAnswers = [];
-            currentQuiz.currentQuestionIndex = 0;
+            // Reintentar la pregunta actual sin reiniciar el cuestionario
+            const currentIndex = currentQuiz.currentQuestionIndex;
+            userAnswers[currentIndex] = undefined;
             
             document.getElementById('quizResult').style.display = 'none';
             document.getElementById('retryQuiz').style.display = 'none';
