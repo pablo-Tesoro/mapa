@@ -944,27 +944,8 @@
                 poses: [
                     {
                         name: "Abrazo por la Espalda",
-                        description: "Uno de vosotros abraza al otro por detrás, con las manos en la cintura. Mirad hacia el mismo lado con sonrisas naturales.",
                         emoji: "🤗",
-                        tips: "Consejo: El que abraza debe apoyar suavemente la barbilla en el hombro del otro.",
-                        imageSvg: `<svg width="160" height="120" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Persona de atrás -->
-                            <circle cx="90" cy="25" r="12" fill="#FFB6C1" stroke="#D8537A" stroke-width="2"/>
-                            <rect x="82" y="35" width="16" height="25" rx="8" fill="#FF69B4" stroke="#D8537A" stroke-width="2"/>
-                            <rect x="78" y="60" width="8" height="20" rx="4" fill="#FFB6C1" stroke="#D8537A" stroke-width="2"/>
-                            <rect x="94" y="60" width="8" height="20" rx="4" fill="#FFB6C1" stroke="#D8537A" stroke-width="2"/>
-                            <!-- Brazos abrazando -->
-                            <path d="M 82 45 Q 65 50 60 55 Q 58 58 62 60" fill="none" stroke="#D8537A" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M 98 45 Q 115 50 120 55 Q 122 58 118 60" fill="none" stroke="#D8537A" stroke-width="3" stroke-linecap="round"/>
-                            <!-- Persona de adelante -->
-                            <circle cx="80" cy="30" r="12" fill="#FFC0CB" stroke="#D8537A" stroke-width="2"/>
-                            <rect x="72" y="40" width="16" height="25" rx="8" fill="#FFB6C1" stroke="#D8537A" stroke-width="2"/>
-                            <rect x="68" y="65" width="8" height="20" rx="4" fill="#FFC0CB" stroke="#D8537A" stroke-width="2"/>
-                            <rect x="84" y="65" width="8" height="20" rx="4" fill="#FFC0CB" stroke="#D8537A" stroke-width="2"/>
-                            <!-- Corazones -->
-                            <text x="40" y="25" font-size="12" fill="#FF69B4">💕</text>
-                            <text x="130" y="35" font-size="10" fill="#FF69B4">💖</text>
-                        </svg>`
+                        imageUrl: "pose1.png"
                     },
                     {
                         name: "Frente a Frente",
@@ -1315,7 +1296,7 @@
                     <span class="pose-emoji">${pose.emoji}</span>
                     <div class="pose-name">${pose.name}</div>
                     <div class="pose-image">
-                        ${pose.imageSvg}
+                        ${pose.imageUrl}
                     </div>
                     <div class="pose-description">${pose.description}</div>
                     <div class="pose-tips">${pose.tips}</div>
