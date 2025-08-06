@@ -943,7 +943,7 @@
                 isPhotoChallenge: true,
                 poses: [
                     {
-                        name: "Abrazo por la Espalda",
+                        name: "Primera Foto",
                         emoji: "🤗",
                         imageUrl: "pose1.png"
                     },
@@ -1293,6 +1293,7 @@
                 const poseCard = document.createElement('div');
                 poseCard.className = `pose-card ${isCompleted ? 'completed' : ''}`;
                 poseCard.innerHTML = `
+                    <span>${pose.name}</span>
                     <div class="pose-image">
                         <img 
                           src=${pose.imageUrl} 
